@@ -1,10 +1,15 @@
 import { useMemo } from "react";
-import { Area, AreaChart, ResponsiveContainer, YAxis } from "recharts";
-import type { TrendDataPoint } from "../types";
+import { Chart, type ChartSpec, type RawChartRow } from "./chart";
+
+const TREND_CHART_SPEC: ChartSpec = {
+  type: "area",
+  xKey: "time",
+  series: [{ key: "severity", label: "Severity", unit: "count" }],
+};
 
 export function TrendChart() {
-  const trendData = useMemo<TrendDataPoint[]>(() => {
-    const data: TrendDataPoint[] = [];
+  const rawData = useMemo<RawChartRow[]>(() => {
+    const data: RawChartRow[] = [];
     const now = Date.now();
     for (let i = 60; i >= 0; i--) {
       const value = Math.random() > 0.7 ? Math.floor(Math.random() * 3) : 0;
@@ -22,27 +27,7 @@ export function TrendChart() {
         <div className="text-slate-400 text-xs whitespace-nowrap">
           Recent Activity
         </div>
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={trendData}>
-            <defs>
-              <linearGradient id="severityGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#ef4444" stopOpacity={0.8} />
-                <stop offset="50%" stopColor="#facc15" stopOpacity={0.6} />
-                <stop offset="100%" stopColor="#22c55e" stopOpacity={0.4} />
-              </linearGradient>
-            </defs>
-            <YAxis hide domain={[0, 2]} />
-            <Area
-              type="monotone"
-              dataKey="severity"
-              stroke="#64748b"
-              strokeWidth={1}
-              fill="url(#severityGradient)"
-              fillOpacity={0.6}
-              isAnimationActive={false}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+        <Chart spec={TREND_CHART_SPEC} data={rawData} />
       </div>
     </div>
   );

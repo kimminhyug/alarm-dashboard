@@ -93,3 +93,5 @@ export interface TrendDataPoint {
 
 /** 시스템 데이터 일부 (last_update 제외, 시나리오 등에 사용) */
 export type SystemDataInput = Pick<SystemData, "system_status" | "subsystems">;
+
+export * from "./dashboardApi";
